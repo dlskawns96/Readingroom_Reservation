@@ -122,7 +122,7 @@ app.get( '/reservation', function(req, res, next){
     res.redirect('/Page_Reservation.html');
 });
 
-app.post('/info',function (req,res,next) {
+app.get('/info',function (req,res,next) {
     console.log('여기 들어가요')
 
     var sql = 'SELECT * FROM reservationList where ID = ' + "'" + ID + "'";
@@ -206,26 +206,39 @@ app.post("/rsv", (req, res) => {
 
 app.get('/seats', (req, res) => {
     var sql = 'SELECT * FROM reservationlist';
+    var Now = new Date();
+    var nowTime = Now.getHours();
+    var deleteTime = 0;
 
     connection.query(sql, (error, rows) => {
         if(error) {
             console.log("ERROR");
         } else {
+
             numOfRsv = rows.length;
             for(var i = 0; i < rows.length; i++) {
                 //console.log(rows[i]);
-                var seatNum = rows[i].seatNum;
-                var seatX = seatNum % 100;
-                var seatY = (seatNum - seatX) / 100;
-                var startTime = rows[i].startTime;
-                var usingTime = rows[i].finishTime;
-                var finishTime = startTime + usingTime;
-                console.log(seatNum + " " + seatY + " " + seatX + " " + startTime + " " + finishTime);
+                if(Number(rows[i].startTime) + Number(rows[i].finishTime) <= nowTime )
+                {
+                    connection.query('delete from reservationList where ID=' + "'" + rows[i].ID + "'")
+                    if(error) throw error;
 
-                if ((startTime < start && finishTime > start) || (startTime >= start && finishTime <= finish)
-                    || (startTime < finish && finishTime > finish)){
-                    seats_by_time[seatY][seatX] = 2;
-                    console.log(seats_by_time[seatY][seatX]);
+                }
+                else{
+
+                    var seatNum = rows[i].seatNum;
+                    var seatX = seatNum % 100;
+                    var seatY = (seatNum - seatX) / 100;
+                    var startTime = rows[i].startTime;
+                    var usingTime = rows[i].finishTime;
+                    var finishTime = startTime + usingTime;
+                    console.log(seatNum + " " + seatY + " " + seatX + " " + startTime + " " + finishTime);
+
+                    if ((startTime < start && finishTime > start) || (startTime >= start && finishTime <= finish)
+                        || (startTime < finish && finishTime > finish)){
+                        seats_by_time[seatY][seatX] = 2;
+                        console.log(seats_by_time[seatY][seatX]);
+                    }
                 }
             }
         }
