@@ -81,6 +81,14 @@ var use = 1;
 var finish = 10;
 let numOfRsv;
 
+/*
+var Now = new Date();
+var start = Now.getHours();
+var use = 1;
+var finish = start + 1;
+let numOfRsv;
+*/
+
 //Express 웹서버 생성
 var app = express();
 app.use(cors());
@@ -206,44 +214,31 @@ app.post("/rsv", (req, res) => {
 
 app.get('/seats', (req, res) => {
     var sql = 'SELECT * FROM reservationlist';
-    var Now = new Date();
-    var nowTime = Now.getHours();
-    var deleteTime = 0;
 
     connection.query(sql, (error, rows) => {
         if(error) {
             console.log("ERROR");
         } else {
-
             numOfRsv = rows.length;
             for(var i = 0; i < rows.length; i++) {
                 //console.log(rows[i]);
-                if(Number(rows[i].startTime) + Number(rows[i].finishTime) <= nowTime )
-                {
-                    connection.query('delete from reservationList where ID=' + "'" + rows[i].ID + "'")
-                    if(error) throw error;
+                var seatNum = rows[i].seatNum;
+                var seatX = seatNum % 100;
+                var seatY = (seatNum - seatX) / 100;
+                var startTime = rows[i].startTime;
+                var usingTime = rows[i].finishTime;
+                var finishTime = startTime + usingTime;
+                // console.log(seatNum + " " + seatY + " " + seatX + " " + startTime + " " + finishTime);
 
-                }
-                else{
-
-                    var seatNum = rows[i].seatNum;
-                    var seatX = seatNum % 100;
-                    var seatY = (seatNum - seatX) / 100;
-                    var startTime = rows[i].startTime;
-                    var usingTime = rows[i].finishTime;
-                    var finishTime = startTime + usingTime;
-                    console.log(seatNum + " " + seatY + " " + seatX + " " + startTime + " " + finishTime);
-
-                    if ((startTime < start && finishTime > start) || (startTime >= start && finishTime <= finish)
-                        || (startTime < finish && finishTime > finish)){
-                        seats_by_time[seatY][seatX] = 2;
-                        console.log(seats_by_time[seatY][seatX]);
-                    }
+                if ((startTime < start && finishTime > start) || (startTime >= start && finishTime <= finish)
+                    || (startTime < finish && finishTime > finish)){
+                    seats_by_time[seatY][seatX] = 2;
+                    // console.log(seats_by_time[seatY][seatX]);
                 }
             }
         }
 
-        console.log(seats_by_time);
+        // console.log(seats_by_time);
         res.send(seats_by_time);
     });
 
