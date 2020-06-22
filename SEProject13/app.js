@@ -122,7 +122,7 @@ app.get( '/reservation', function(req, res, next){
     res.redirect('/Page_Reservation.html');
 });
 
-app.get('/info',function (req,res,next) {
+app.post('/info',function (req,res,next) {
     console.log('여기 들어가요')
 
     var sql = 'SELECT * FROM reservationList where ID = ' + "'" + ID + "'";

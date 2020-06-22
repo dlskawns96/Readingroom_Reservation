@@ -224,6 +224,22 @@
     });
 </script>
 <script type="text/javascript">
+    $(function() {
+        $.getJSON('http://localhost:8000/info', function (data) {
+            $.each(data, function (i, f) {
+                var y = f.seatNum % 100;
+                var x = (f.seatNum - y) / 100;
+                seatNum = x + "-" + y;
+                var tblRow = "<tr>" +
+                    "<td>" + f.ID + "</td>" +
+                    "<td>" + seatNum  + "</td>" + "<td>" + f.startTime + "</td>" + "<td>" + f.finishTime + "</td>" +
+                    "</tr>"
+                $(tblRow).appendTo("#informationList tbody");
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
     //각 좌석을 click 할 때 실행될 함수 정의
     var onClickSeat = function(){
 
@@ -319,23 +335,6 @@
         }
     }
 
-</script>
-<script type="text/javascript">
-    $(function() {
-        $.getJSON('http://localhost:8000/info', function (data) {
-            $.each(data, function (i, f) {
-                var y = f.seatNum % 100;
-                var x = (f.seatNum - y) / 100;
-                seatNum = x + "-" + y;
-                var tblRow = "<tr>" +
-                    "<td>" + f.ID + "</td>" +
-                    "<td>" + seatNum  + "</td>" + "<td>" + f.startTime + "</td>" + "<td>" + f.finishTime + "</td>" +
-                    "</tr>"
-                $(tblRow).appendTo("#informationList tbody");
-
-            });
-        });
-    });
 </script>
 <link rel="stylesheet" href="//unpkg.com/bootstrap@4/dist/css/bootstrap.min.css">
 <script src='//unpkg.com/jquery@3/dist/jquery.min.js'></script>
