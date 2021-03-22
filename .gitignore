@@ -142,19 +142,4 @@ temp/
 !.vscode/extensions.json
 *.code-workspace
 
-### Web ###
-*.asp
-*.cer
-*.csr
-*.css
-*.htm
-*.html
-*.js
-*.jsp
-*.php
-*.rss
-*.wasm
-*.wat
-*.xhtml
-
-# End of https://www.toptal.com/developers/gitignore/api/vscode,node,web
+# End of https://www.toptal.com/developers/gitignore/api/vscode,node
