@@ -66,7 +66,7 @@
     "parseqs": "0.0.5",
     "parseuri": "0.0.5",
     "serve-static": "^1.14.1",
-    "socket.io-parser": "~3.3.0",
+    "socket.io-parser": "~3.3.2",
     "to-array": "0.1.4"
   },
   "deprecated": false,
